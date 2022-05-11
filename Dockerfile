@@ -1,16 +1,16 @@
 FROM python:3.7.7
 
-WORKDIR /usr/src/app
+ENV PYTHONUNBUFFERED 1
 
-COPY requirements.txt ./
-RUN pip3 install -r requirements.txt
+WORKDIR /app
 
-COPY . .
+COPY requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . /app
 
 RUN python manage.py makemigrations
 RUN python manage.py migrate accounts
 RUN python manage.py migrate articles
 
-CMD ["python", "manage.py", "runserver"]
-
-EXPOSE 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
